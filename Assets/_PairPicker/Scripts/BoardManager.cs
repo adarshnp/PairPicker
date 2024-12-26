@@ -26,7 +26,7 @@ public class BoardManager : MonoBehaviour
     }
     private void InitializeBoard(int rows, int columns)
     {
-        //ClearCards
+        ClearCards();
         cardValues.Clear();
 
         totalPairs = (rows * columns) / 2;
@@ -40,7 +40,7 @@ public class BoardManager : MonoBehaviour
             cardValues.Add(i);
         }
 
-        //ShuffleCardValues
+        ShuffleCardValues();
 
         PopulateCardsToGrid(rows, columns);
 
@@ -89,6 +89,24 @@ public class BoardManager : MonoBehaviour
         firstSelectedCard = null;
         secondSelectedCard = null;
         isCheckingMatch = false;
+    }
+    private void ShuffleCardValues()
+    {
+        for (int i = 0; i < cardValues.Count; i++)
+        {
+            int randomIndex = Random.Range(0, cardValues.Count);
+            int temp = cardValues[i];
+            cardValues[i] = cardValues[randomIndex];
+            cardValues[randomIndex] = temp;
+        }
+    }
+
+    private void ClearCards()
+    {
+        foreach (Transform child in board)
+        {
+            Destroy(child.gameObject);
+        }
     }
     private void PopulateCardsToGrid(int rows, int columns)
     {
