@@ -99,6 +99,13 @@ public class GameManager : MonoBehaviour
         }
         return false;
     }
+    public void ResumeLevel()
+    {
+        onGameSessionStart.Invoke();
+        currentLevelIndex++;
+        currentScore = 0;
+        LoadLevel(currentLevelIndex);
+    }
 
     //handle new game
     public void NewGame()
