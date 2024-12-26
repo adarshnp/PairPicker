@@ -1559,6 +1559,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 7389228755423229672, guid: 57983904f136bed40bb62f708d169eaa, type: 3}
   board: {fileID: 1399861376}
+  cam: {fileID: 1708798910}
   spacing: 1.5
 --- !u!1 &1390442859
 GameObject:
