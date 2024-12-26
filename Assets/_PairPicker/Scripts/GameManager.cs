@@ -78,7 +78,14 @@ public class GameManager : MonoBehaviour
     //handle end game
     public void WinLevel()
     {
-        //play sound depending on game win or match win
+        if (IsLastLevel())
+        {
+            SoundManager.Instance.PlayGameWinSound();
+        }
+        else
+        {
+            SoundManager.Instance.PlayMatchWinSound();
+        }
 
         CompletedLevelsScore = currentScore;
         if (highScore < CompletedLevelsScore)
