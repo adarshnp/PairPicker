@@ -53,34 +53,36 @@ public class BoardManager : MonoBehaviour
         if (firstSelectedCard == null)
         {
             firstSelectedCard = selectedCard;
-            //play card open anim
+            selectedCard.StartCardOpenAnimation();
         }
         else
         {
             secondSelectedCard = selectedCard;
-            //play card open anim
+            selectedCard.StartCardOpenAnimation();
             //increment turns
-            CheckForMatch();
+            StartCoroutine(CheckForMatch());
         }
     }
-    private void CheckForMatch()
+    private IEnumerator CheckForMatch()
     {
         isCheckingMatch = true;
 
 
+        yield return new WaitForSeconds(1f);  // Delay for the user to see the flipped cards
 
         if (firstSelectedCard.Value == secondSelectedCard.Value)
         {
             firstSelectedCard.MarkAsMatched();
             secondSelectedCard.MarkAsMatched();
             //increment matches
-            
+            //play match sound
 
         }
         else
         {
-            //return anim of first card
-            //return anim of second card
+            firstSelectedCard.StartCardReturnAnimation();
+            secondSelectedCard.StartCardReturnAnimation();
+            //play mismatch sound
         }
 
         firstSelectedCard = null;

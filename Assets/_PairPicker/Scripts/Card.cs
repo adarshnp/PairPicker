@@ -12,6 +12,13 @@ public class Card : MonoBehaviour
     public int Value { get; private set; }
     public bool IsMatched { get; private set; } = false;
     public TMP_Text valueText;
+    private Vector3 originalScale;
+    private SpriteRenderer spriteRenderer;
+    private void Start()
+    {
+        originalScale = transform.localScale;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
     public void SetCardValue(int value)
     {
         this.Value = value;
@@ -22,14 +29,22 @@ public class Card : MonoBehaviour
     {
         BoardManager.Instance.CardSelected(this);
     }
+    public void StartCardOpenAnimation()
+    {
+        StartCoroutine(transform.PlayCardOpen(originalScale));
+    }
+    public void StartCardReturnAnimation()
+    {
+        StartCoroutine(transform.PlayCardReturn(originalScale));
+    }
     public void MarkAsMatched()
     {
         IsMatched = true;
-        VanishAndDisable();
+        StartCoroutine(VanishAndDisable());
     }
-    private void VanishAndDisable()
+    private IEnumerator VanishAndDisable()
     {
-        //card vanish anim
+        yield return StartCoroutine(spriteRenderer.PlayCardVanish(originalScale));
 
         // After the animation is complete, disable the GameObject
         gameObject.SetActive(false);
