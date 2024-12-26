@@ -20,10 +20,18 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
-        //register card selection to board manager
+        BoardManager.Instance.CardSelected(this);
     }
     public void MarkAsMatched()
     {
         IsMatched = true;
+        VanishAndDisable();
+    }
+    private void VanishAndDisable()
+    {
+        //card vanish anim
+
+        // After the animation is complete, disable the GameObject
+        gameObject.SetActive(false);
     }
 }

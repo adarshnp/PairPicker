@@ -13,6 +13,9 @@ public class BoardManager : MonoBehaviour
     private int totalPairs;
     private List<int> cardValues = new List<int>();
     [SerializeField] private float spacing;
+    private Card firstSelectedCard;
+    private Card secondSelectedCard;
+    private bool isCheckingMatch = false;
     private void Awake()
     {
         Instance = this;
@@ -41,6 +44,48 @@ public class BoardManager : MonoBehaviour
         PopulateCardsToGrid(rows, columns);
 
         //ScaleBoard
+    }
+    public void CardSelected(Card selectedCard)
+    {
+        if (isCheckingMatch || selectedCard.IsMatched || selectedCard == firstSelectedCard) return;
+
+
+        if (firstSelectedCard == null)
+        {
+            firstSelectedCard = selectedCard;
+            //play card open anim
+        }
+        else
+        {
+            secondSelectedCard = selectedCard;
+            //play card open anim
+            //increment turns
+            CheckForMatch();
+        }
+    }
+    private void CheckForMatch()
+    {
+        isCheckingMatch = true;
+
+
+
+        if (firstSelectedCard.Value == secondSelectedCard.Value)
+        {
+            firstSelectedCard.MarkAsMatched();
+            secondSelectedCard.MarkAsMatched();
+            //increment matches
+            
+
+        }
+        else
+        {
+            //return anim of first card
+            //return anim of second card
+        }
+
+        firstSelectedCard = null;
+        secondSelectedCard = null;
+        isCheckingMatch = false;
     }
     private void PopulateCardsToGrid(int rows, int columns)
     {
