@@ -92,6 +92,11 @@ public class GameManager : MonoBehaviour
         currentScore = 0;
         LoadLevel(currentLevelIndex);
     }
+    public void NextLevel()
+    {
+        currentLevelIndex++;
+        LoadLevel(currentLevelIndex);
+    }
     public void LoadLevel(int levelIndex)
     {
         if (levelIndex >= cardLayoutData.layouts.Length)
@@ -109,6 +114,10 @@ public class GameManager : MonoBehaviour
         Debug.Log($"New Game!!! turns : {turns} \n matches : {matches} \n score : {currentScore} \n highscore : {highScore}");
 
         onGridGeneration.Invoke(layout.rows, layout.columns);
+    }
+    public void EnterMainMenu()
+    {
+        onEnterMainMenu.Invoke();
     }
     public void Quit()
     {
