@@ -13,13 +13,13 @@ public class BootStrapper : MonoBehaviour
     {
         OpenMainMenu();
     }
-    private void OpenGameScene()
+    public void OpenGameScene()
     {
         mainMenu.SetActive(false);
         gameLevel.SetActive(true);
     }
 
-    private void OpenMainMenu()
+    public void OpenMainMenu()
     {
         gameLevel.SetActive(false);
         mainMenu.SetActive(true);
