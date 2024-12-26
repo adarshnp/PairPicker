@@ -21,8 +21,17 @@ public class GameManager : MonoBehaviour
     public event Action<int, int> onGridGeneration; // generate card layout for current level
     public event Action<int, int, int> onSaveGame;// on save after a matchwin
 
+    #region UI_events
+    public event Action<int> onTurnUpdate;//update UI for turn counter
+    public event Action<int> onMatchesUpdate;//update UI for match counter
+    public event Action<int> onScoreUpdate;//update UI for score
+    public event Action<int> onHighScoreUpdate; // to update highscore after load
+
+    public event Action onMatchWin; // enable matchSuccess UI and disable game board UI 
     public event Action onGameSessionStart; //enable game level UI and disable main menu UI
+    public event Action onNextLevel; // disable match complaetion UI and enable game board UI
     public event Action onEnterMainMenu;
+    #endregion
 
     public static GameManager instance;
 
@@ -42,7 +51,7 @@ public class GameManager : MonoBehaviour
     {
         turns++;
         currentScore = CompletedLevelsScore + CalculateCurrentLevelScore();
-        Debug.Log($"turn : {turns} \n score : {currentScore}");
+        onTurnUpdate.Invoke(turns);
     }
 
     //track matches count
@@ -50,7 +59,7 @@ public class GameManager : MonoBehaviour
     {
         matches++;
         currentScore = CompletedLevelsScore + CalculateCurrentLevelScore();
-        Debug.Log($"matches : {matches} \n score : {currentScore}");
+        onMatchesUpdate.Invoke(matches);
         if (totalPairs <= matches)
         {
             WinLevel();
@@ -76,12 +85,19 @@ public class GameManager : MonoBehaviour
         {
             highScore = CompletedLevelsScore;
         }
-
-        Debug.Log($"WON!!! \n score : {CompletedLevelsScore} \n highscore : {highScore}");
-
+        onScoreUpdate.Invoke(CompletedLevelsScore);
+        onMatchWin.Invoke();
+        onHighScoreUpdate.Invoke(highScore);
     }
 
-
+    public bool IsLastLevel()
+    {
+        if (currentLevelIndex == cardLayoutData.layouts.Length - 1)
+        {
+            return true;
+        }
+        return false;
+    }
 
     //handle new game
     public void NewGame()
@@ -95,6 +111,7 @@ public class GameManager : MonoBehaviour
     public void NextLevel()
     {
         currentLevelIndex++;
+        onNextLevel.Invoke();
         LoadLevel(currentLevelIndex);
     }
     public void LoadLevel(int levelIndex)
@@ -111,7 +128,9 @@ public class GameManager : MonoBehaviour
         turns = 0;
         currentScore = CompletedLevelsScore;
 
-        Debug.Log($"New Game!!! turns : {turns} \n matches : {matches} \n score : {currentScore} \n highscore : {highScore}");
+        onMatchesUpdate.Invoke(0);
+        onTurnUpdate.Invoke(0);
+        onScoreUpdate.Invoke(CompletedLevelsScore);
 
         onGridGeneration.Invoke(layout.rows, layout.columns);
     }

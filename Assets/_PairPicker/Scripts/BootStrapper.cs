@@ -12,6 +12,7 @@ public class BootStrapper : MonoBehaviour
     private void Start()
     {
         GameManager.instance.onGameSessionStart += OpenGameScene;
+        GameManager.instance.onEnterMainMenu += OpenMainMenu;
         OpenMainMenu();
     }
     public void OpenGameScene()
