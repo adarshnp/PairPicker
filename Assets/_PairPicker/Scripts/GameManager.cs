@@ -87,6 +87,7 @@ public class GameManager : MonoBehaviour
         }
         onScoreUpdate.Invoke(CompletedLevelsScore);
         onMatchWin.Invoke();
+        onSaveGame.Invoke(currentLevelIndex, currentScore, highScore);
         onHighScoreUpdate.Invoke(highScore);
     }
 
@@ -133,6 +134,19 @@ public class GameManager : MonoBehaviour
         onScoreUpdate.Invoke(CompletedLevelsScore);
 
         onGridGeneration.Invoke(layout.rows, layout.columns);
+    }
+    //handle Resume level from save data
+    public void ApplySavedDataToGame(SaveData data)
+    {
+        if (data == null)
+        {
+            onHighScoreUpdate.Invoke(0);
+            return;
+        }
+        CompletedLevelsScore = data.score;
+        currentLevelIndex = data.level;
+        highScore = data.highScore;
+        onHighScoreUpdate.Invoke(highScore);
     }
     public void EnterMainMenu()
     {
