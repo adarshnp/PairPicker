@@ -22,7 +22,7 @@ public class BoardManager : MonoBehaviour
     }
     private void Start()
     {
-        InitializeBoard(2, 2);
+        GameManager.instance.onGridGeneration += InitializeBoard;
     }
     private void InitializeBoard(int rows, int columns)
     {
@@ -31,6 +31,7 @@ public class BoardManager : MonoBehaviour
 
         totalPairs = (rows * columns) / 2;
 
+        GameManager.instance.SetTotalPairsCount(totalPairs);
 
         // Initialize card Values for each pair
         for (int i = 0; i < totalPairs; i++)
@@ -59,7 +60,7 @@ public class BoardManager : MonoBehaviour
         {
             secondSelectedCard = selectedCard;
             selectedCard.StartCardOpenAnimation();
-            //increment turns
+            GameManager.instance.IncrementTurns();
             StartCoroutine(CheckForMatch());
         }
     }
@@ -74,7 +75,7 @@ public class BoardManager : MonoBehaviour
         {
             firstSelectedCard.MarkAsMatched();
             secondSelectedCard.MarkAsMatched();
-            //increment matches
+            GameManager.instance.IncrementMatches();
             //play match sound
 
         }

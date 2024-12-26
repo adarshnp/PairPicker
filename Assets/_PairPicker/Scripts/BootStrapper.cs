@@ -11,6 +11,7 @@ public class BootStrapper : MonoBehaviour
     [SerializeField] private GameObject gameLevel;
     private void Start()
     {
+        GameManager.instance.onGameSessionStart += OpenGameScene;
         OpenMainMenu();
     }
     public void OpenGameScene()
