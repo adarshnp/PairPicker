@@ -39,7 +39,9 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        cardLayoutData.ValidateLayoutsList();
     }
+
     public void SetTotalPairsCount(int value)
     {
         totalPairs = value;
