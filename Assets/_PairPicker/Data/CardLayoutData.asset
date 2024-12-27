@@ -18,12 +18,10 @@ MonoBehaviour:
   - rows: 2
     columns: 3
   - rows: 3
-    columns: 2
+    columns: 4
   - rows: 4
     columns: 3
-  - rows: 3
-    columns: 5
   - rows: 4
-    columns: 4
+    columns: 5
   - rows: 5
     columns: 6
