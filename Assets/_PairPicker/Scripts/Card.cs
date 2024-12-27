@@ -19,6 +19,7 @@ public class Card : MonoBehaviour
     {
         originalScale = transform.localScale;
         spriteRenderer = GetComponent<SpriteRenderer>();
+        StartCoroutine(FlashCard(1));
     }
     public void SetCardValue(int value)
     {
@@ -41,6 +42,14 @@ public class Card : MonoBehaviour
     {
         IsFlipped = false;
         StartCoroutine(transform.PlayCardReturn(originalScale));
+    }
+    public IEnumerator FlashCard(float duration)
+    {
+        IsFlipped = true;
+        yield return transform.PlayCardOpen(originalScale);
+        yield return new WaitForSeconds(duration);
+        yield return transform.PlayCardReturn(originalScale);
+        IsFlipped = false;
     }
     public void MarkAsMatched()
     {
