@@ -11,6 +11,7 @@ public class Card : MonoBehaviour
 {
     public int Value { get; private set; }
     public bool IsMatched { get; private set; } = false;
+    public bool IsFlipped { get; private set; } = false;
     public TMP_Text valueText;
     private Vector3 originalScale;
     private SpriteRenderer spriteRenderer;
@@ -27,6 +28,8 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if(IsFlipped) { return; }
+        IsFlipped = true;
         BoardManager.Instance.CardSelected(this);
         SoundManager.Instance.PlayFlipSound();
     }
@@ -36,6 +39,7 @@ public class Card : MonoBehaviour
     }
     public void StartCardReturnAnimation()
     {
+        IsFlipped = false;
         StartCoroutine(transform.PlayCardReturn(originalScale));
     }
     public void MarkAsMatched()

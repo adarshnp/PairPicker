@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -47,48 +49,51 @@ public class BoardManager : MonoBehaviour
 
         ScaleBoard(rows, columns);
     }
+    private Queue<Card> selectedCards = new Queue<Card>();
     public void CardSelected(Card selectedCard)
     {
-        if (isCheckingMatch || selectedCard.IsMatched || selectedCard == firstSelectedCard) return;
+        selectedCards.Enqueue(selectedCard);
+        selectedCard.StartCardOpenAnimation();
 
 
-        if (firstSelectedCard == null)
+        if (selectedCards.Count % 2 == 0 && selectedCards.Count >= 2 && !isCheckingMatch)
         {
-            firstSelectedCard = selectedCard;
-            selectedCard.StartCardOpenAnimation();
-        }
-        else
-        {
-            secondSelectedCard = selectedCard;
-            selectedCard.StartCardOpenAnimation();
-            GameManager.instance.IncrementTurns();
+            var values = selectedCards.Select(card => card.Value).ToList();
             StartCoroutine(CheckForMatch());
         }
     }
     private IEnumerator CheckForMatch()
     {
         isCheckingMatch = true;
-
-
-        yield return new WaitForSeconds(1f);  // Delay for the user to see the flipped cards
-
-        if (firstSelectedCard.Value == secondSelectedCard.Value)
+        while (selectedCards.Count % 2 == 0 && selectedCards.Count >= 2)
         {
-            firstSelectedCard.MarkAsMatched();
-            secondSelectedCard.MarkAsMatched();
-            GameManager.instance.IncrementMatches();
-            SoundManager.Instance.PlayMatchSound();
+            GameManager.instance.IncrementTurns();
+
+            firstSelectedCard = selectedCards.Dequeue();
+            secondSelectedCard = selectedCards.Dequeue();
+
+            yield return new WaitForSeconds(1f);  // Delay for the user to see the flipped cards
+
+            if (firstSelectedCard.Value == secondSelectedCard.Value)
+            {
+                firstSelectedCard.MarkAsMatched();
+                secondSelectedCard.MarkAsMatched();
+                GameManager.instance.IncrementMatches();
+                SoundManager.Instance.PlayMatchSound();
+
+            }
+            else
+            {
+                firstSelectedCard.StartCardReturnAnimation();
+                secondSelectedCard.StartCardReturnAnimation();
+                SoundManager.Instance.PlayMismatchSound();
+            }
+
+            firstSelectedCard = null;
+            secondSelectedCard = null;
 
         }
-        else
-        {
-            firstSelectedCard.StartCardReturnAnimation();
-            secondSelectedCard.StartCardReturnAnimation();
-            SoundManager.Instance.PlayMismatchSound();
-        }
 
-        firstSelectedCard = null;
-        secondSelectedCard = null;
         isCheckingMatch = false;
     }
     private void ShuffleCardValues()
@@ -104,6 +109,7 @@ public class BoardManager : MonoBehaviour
 
     private void ClearCards()
     {
+        selectedCards.Clear();
         foreach (Transform child in board)
         {
             Destroy(child.gameObject);
