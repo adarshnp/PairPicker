@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     public float scoreMultiplierIncrementPerLevel = 0.25f;
     private int CompletedLevelsScore = 0;
 
-
     public event Action<int, int> onGridGeneration; // generate card layout for current level
     public event Action<int, int, int> onSaveGame;// on save after a matchwin
 
@@ -133,7 +132,6 @@ public class GameManager : MonoBehaviour
     {
         if (levelIndex >= cardLayoutData.layouts.Length)
         {
-            Debug.Log("No more levels available.");
             return;
         }
 
