@@ -19,7 +19,7 @@ public class Card : MonoBehaviour
     {
         originalScale = transform.localScale;
         spriteRenderer = GetComponent<SpriteRenderer>();
-        StartCoroutine(FlashCard(1));
+        StartCoroutine(FlashCard(0.5f));
     }
     public void SetCardValue(int value)
     {
