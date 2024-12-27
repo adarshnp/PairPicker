@@ -18,6 +18,8 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private GameObject scoreTextUI;
     [SerializeField] private TMP_Text scoreUI;
+    [SerializeField] private GameObject levelCompletionMessage;
+    [SerializeField] private GameObject gameCompletionMessage;
 
 
     private void Start()
@@ -70,10 +72,14 @@ public class UIManager : MonoBehaviour
         if (GameManager.instance.IsLastLevel())
         {
             nextLevelButton.SetActive(false);
+            gameCompletionMessage.SetActive(true);
+            levelCompletionMessage.SetActive(false);
         }
         else
         {
             nextLevelButton.SetActive(true);
+            gameCompletionMessage.SetActive(false);
+            levelCompletionMessage.SetActive(true);
         }
     }
     private void CloseMatchCompletionUI()
