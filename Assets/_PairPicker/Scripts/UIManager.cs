@@ -24,6 +24,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        if (GameManager.instance == null) return;
         SubscribeToEvents();
     }
     private void SubscribeToEvents()
@@ -41,25 +42,14 @@ public class UIManager : MonoBehaviour
 
     #region GameScore
 
-    private void UpdateMatchesUI(int value)
-    {
-        matchesUI.text = value.ToString();
-    }
+    private void UpdateMatchesUI(int value) => matchesUI.text = value.ToString();
 
-    private void UpdateTurnsUI(int value)
-    {
-        turnsUI.text = value.ToString();
-    }
+    private void UpdateTurnsUI(int value) => turnsUI.text = value.ToString();
 
-    private void UpdateLevelScoreUI(int value)
-    {
-        levelScoreUI.text = value.ToString();
-    }
+    private void UpdateLevelScoreUI(int value) => levelScoreUI.text = value.ToString();
 
-    private void UpdateHighScoreUI(int value)
-    {
-        highScoreUI.text = value.ToString();
-    }
+    private void UpdateHighScoreUI(int value) => highScoreUI.text = value.ToString();
+
     #endregion
 
     #region MatchCompletion
@@ -69,18 +59,11 @@ public class UIManager : MonoBehaviour
         gameBoard.SetActive(false);
         matchCompletionUI.SetActive(true);
         scoreUI.text = GameManager.instance.currentScore.ToString();
-        if (GameManager.instance.IsLastLevel())
-        {
-            nextLevelButton.SetActive(false);
-            gameCompletionMessage.SetActive(true);
-            levelCompletionMessage.SetActive(false);
-        }
-        else
-        {
-            nextLevelButton.SetActive(true);
-            gameCompletionMessage.SetActive(false);
-            levelCompletionMessage.SetActive(true);
-        }
+
+        bool isLastLevel = GameManager.instance.IsLastLevel();
+        nextLevelButton.SetActive(!isLastLevel);
+        gameCompletionMessage.SetActive(isLastLevel);
+        levelCompletionMessage.SetActive(!isLastLevel);
     }
     private void CloseMatchCompletionUI()
     {
@@ -92,14 +75,7 @@ public class UIManager : MonoBehaviour
     #region MAIN_MENU
     private void ToggleContinueButton()
     {
-        if (GameManager.instance.IsLastLevel())
-        {
-            continueButton.SetActive(false);
-        }
-        else
-        {
-            continueButton.SetActive(true);
-        }
+        continueButton.SetActive(GameManager.instance != null && !GameManager.instance.IsLastLevel());
     }
     #endregion
 }
