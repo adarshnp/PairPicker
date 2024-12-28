@@ -1,15 +1,24 @@
 using UnityEngine;
-
+public enum SoundType
+{
+    Flip,
+    Match,
+    Mismatch,
+    MatchWin,
+    GameWin
+}
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance;
 
+    [Header("Audio Clips")]
     [SerializeField] private AudioClip flipSound;
     [SerializeField] private AudioClip matchSound;
     [SerializeField] private AudioClip mismatchSound;
     [SerializeField] private AudioClip matchWinSound;
     [SerializeField] private AudioClip gameWinSound;
 
+    [Header("Audio Source")]
     [SerializeField] private AudioSource audioSource;
 
     private void Awake()
@@ -18,33 +27,31 @@ public class SoundManager : MonoBehaviour
         {
             Instance = this;
         }
-        else
+    }
+
+    public void PlaySound(SoundType soundType)
+    {
+        if (audioSource == null)
         {
-            Destroy(gameObject);
+            return;
+        }
+        AudioClip clip = GetAudioClip(soundType);
+        if (clip != null)
+        {
+            audioSource.PlayOneShot(clip);
         }
     }
 
-    public void PlayFlipSound()
+    private AudioClip GetAudioClip(SoundType soundType)
     {
-        audioSource.PlayOneShot(flipSound);
-    }
-
-    public void PlayMatchSound()
-    {
-        audioSource.PlayOneShot(matchSound);
-    }
-
-    public void PlayMismatchSound()
-    {
-        audioSource.PlayOneShot(mismatchSound);
-    }
-
-    public void PlayMatchWinSound()
-    {
-        audioSource.PlayOneShot(matchWinSound);
-    }
-    public void PlayGameWinSound()
-    {
-        audioSource.PlayOneShot(gameWinSound);
+        return soundType switch
+        {
+            SoundType.Flip => flipSound,
+            SoundType.Match => matchSound,
+            SoundType.Mismatch => mismatchSound,
+            SoundType.MatchWin => matchWinSound,
+            SoundType.GameWin => gameWinSound,
+            _ => null
+        };
     }
 }

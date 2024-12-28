@@ -32,7 +32,7 @@ public class Card : MonoBehaviour
         if(IsFlipped) { return; }
         IsFlipped = true;
         BoardManager.Instance.CardSelected(this);
-        SoundManager.Instance.PlayFlipSound();
+        SoundManager.Instance.PlaySound(SoundType.Flip);
     }
     public void StartCardOpenAnimation()
     {
@@ -60,7 +60,6 @@ public class Card : MonoBehaviour
     {
         yield return StartCoroutine(spriteRenderer.PlayCardVanish(originalScale));
 
-        // After the animation is complete, disable the GameObject
         gameObject.SetActive(false);
     }
 }

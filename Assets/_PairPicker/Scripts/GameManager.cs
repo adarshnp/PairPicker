@@ -82,11 +82,11 @@ public class GameManager : MonoBehaviour
     {
         if (IsLastLevel())
         {
-            SoundManager.Instance.PlayGameWinSound();
+            SoundManager.Instance.PlaySound(SoundType.GameWin);
         }
         else
         {
-            SoundManager.Instance.PlayMatchWinSound();
+            SoundManager.Instance.PlaySound(SoundType.MatchWin);
         }
 
         CompletedLevelsScore = currentScore;
