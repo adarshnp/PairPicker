@@ -39,3 +39,11 @@ Animations are completely handled by code.
 
 - Game performance is optimized to run smoothly on both CPU and GPU, ensuring a consistent experience across devices.
 - No crashes, errors, or warnings are present in the project, ensuring stability.
+
+## Contact
+
+For any inquiries or feedback, feel free to reach out to me:
+
+- Email: adarshnp49@gmail.com
+- LinkedIn: [https://www.linkedin.com/in/adarsh-np/](https://www.linkedin.com/in/adarsh-np/)
+- GitHub: [https://github.com/adarshnp](https://github.com/adarshnp)
