@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
+
 /// <summary>
 /// Game Manager class that handles score and game flow
 /// </summary>
