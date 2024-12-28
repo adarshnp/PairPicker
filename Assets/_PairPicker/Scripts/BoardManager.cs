@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -10,15 +9,20 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour
 {
     public static BoardManager Instance;
+
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private Transform board;
     [SerializeField] private Camera cam;
+    [SerializeField] private float spacing;
+
     private int totalPairs;
     private List<int> cardValues = new List<int>();
-    [SerializeField] private float spacing;
+    private Queue<Card> selectedCards = new Queue<Card>();
+
     private Card firstSelectedCard;
     private Card secondSelectedCard;
     private bool isCheckingMatch = false;
+
     private void Awake()
     {
         Instance = this;
@@ -33,15 +37,9 @@ public class BoardManager : MonoBehaviour
         cardValues.Clear();
 
         totalPairs = (rows * columns) / 2;
-
         GameManager.instance.SetTotalPairsCount(totalPairs);
 
-        // Initialize card Values for each pair
-        for (int i = 0; i < totalPairs; i++)
-        {
-            cardValues.Add(i);
-            cardValues.Add(i);
-        }
+        GenerateCardValues();
 
         ShuffleCardValues();
 
@@ -49,23 +47,31 @@ public class BoardManager : MonoBehaviour
 
         ScaleBoard(rows, columns);
     }
-    private Queue<Card> selectedCards = new Queue<Card>();
+    private void GenerateCardValues()
+    {
+        // Initialize card Values for each pair
+        for (int i = 0; i < totalPairs; i++)
+        {
+            cardValues.Add(i);
+            cardValues.Add(i);
+        }
+    }
     public void CardSelected(Card selectedCard)
     {
         selectedCards.Enqueue(selectedCard);
         selectedCard.StartCardOpenAnimation();
 
 
-        if (selectedCards.Count % 2 == 0 && selectedCards.Count >= 2 && !isCheckingMatch)
+        if (selectedCards.Count % 2 == 0  && !isCheckingMatch)
         {
-            var values = selectedCards.Select(card => card.Value).ToList();
             StartCoroutine(CheckForMatch());
         }
     }
     private IEnumerator CheckForMatch()
     {
         isCheckingMatch = true;
-        while (selectedCards.Count % 2 == 0 && selectedCards.Count >= 2)
+
+        while (selectedCards.Count >= 2)
         {
             GameManager.instance.IncrementTurns();
 
@@ -101,9 +107,7 @@ public class BoardManager : MonoBehaviour
         for (int i = 0; i < cardValues.Count; i++)
         {
             int randomIndex = Random.Range(0, cardValues.Count);
-            int temp = cardValues[i];
-            cardValues[i] = cardValues[randomIndex];
-            cardValues[randomIndex] = temp;
+            (cardValues[i], cardValues[randomIndex]) = (cardValues[randomIndex], cardValues[i]); // Swap values
         }
     }
 
@@ -154,16 +158,10 @@ public class BoardManager : MonoBehaviour
         float gridAspectRatio = gridSize.x / gridSize.y;
         float viewportAspectRatio = viewPortWidthInWorldSpace / viewPortHeightInWorldSpace;
 
-        float scaleFactor;
+        float scaleFactor = gridAspectRatio > viewportAspectRatio
+            ? viewPortWidthInWorldSpace / gridSize.x
+            : viewPortHeightInWorldSpace / gridSize.y;
 
-        if (gridAspectRatio > viewportAspectRatio)
-        {
-            scaleFactor = viewPortWidthInWorldSpace / gridSize.x;
-        }
-        else
-        {
-            scaleFactor = viewPortHeightInWorldSpace / gridSize.y;
-        }
         scaleFactor = Mathf.Clamp(scaleFactor, 0.01f, 2);
         board.localScale = Vector3.one * scaleFactor;
     }
